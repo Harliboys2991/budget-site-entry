@@ -1,17 +1,19 @@
-// A working best-site-01 entry (Node 22, standard library only): the site is this directory's app/ folder, plain
-// static files a browser opens at app/index.html (ES modules, CSS, no build step), its content held in its own files:
-// nothing it runs, styles or shows loads over the network. The program hands it in: it copies app/ and screenshots/
-// from beside this file to /output and writes /output/dossier.json, the summary the judge reads (your screenshots, the
-// first load's files and bytes, and your source), with the vendored make.fun library. Leave vendor/makefun-frontend.ts
-// as it is: the scorer requires dossier.json to be byte for byte what its own copy writes.
+// Willow House Budget — the hand-in entrypoint.
 //
-// A starting point, not a winner: a plain recipe collection, a list of recipes and a page for each. Build the site the
-// brief asks for in app/ (its content, ease of use, a phone layout, its look), put 3 or 4 PNG or JPEG screenshots of
-// it running in screenshots/ (the first by name is the cover; one may be a 390 x 844 phone view; shots.json says which
-// views this starter's were taken of), and run it.
+// This file is the small program that packages the finished site for the
+// judge. The site itself is a folder of static files: app/index.html plus
+// its scripts and styles, with nothing fetched from the network. What this
+// program does is gather that folder, together with a few screenshots of
+// the site running, into the output directory, and then leave behind a
+// dossier.json there — a summary the scorer reads, built by the vendored
+// make.fun library so the summary is byte-identical to the scorer's own
+// copy of it.
 //
-// Serve it locally with `node serve.ts`, then open http://localhost:8080.
-// Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
+// It runs on plain Node 22 with only the standard library, no install and
+// no build step: `node main.ts` from this directory. Outside the grader's
+// container the destination can be pointed elsewhere with
+// MAKEFUN_OUTPUT_DIR, e.g.:
+//
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
 import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
@@ -19,18 +21,43 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-frontend.ts';
 
-const here = fileURLToPath(new URL('.', import.meta.url));
-const out = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+// The folder this file sits in, so app/ and screenshots/ are found
+// relative to it no matter where the command is run from.
+const entryRoot = fileURLToPath(new URL('.', import.meta.url));
 
-mkdirSync(out, { recursive: true });
-cpSync(join(here, 'app'), join(out, 'app'), { recursive: true });
-mkdirSync(join(out, 'screenshots'), { recursive: true });
-if (existsSync(join(here, 'screenshots'))) cpSync(join(here, 'screenshots'), join(out, 'screenshots'), { recursive: true });
+// Where the package goes: the grader's /output, or an override for
+// local runs.
+const destination = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 
-// The scorer's own caps (reference/gate.json): only text_max_bytes shapes the bytes; the others refuse an entry the
-// scorer would refuse (more than 4 screenshots or one over 256 KiB; more than 993 files and directories in app/ or
-// 16 MiB of app files: app/ counts beside /output's own 1000-entry cap, its screenshots/ and dossier.json).
-writeFileSync(
-  join(out, 'dossier.json'),
-  buildDossier(out, { text_max_bytes: 163840, screenshots: { max: 4, max_bytes: 262144 }, app_max_files: 993, app_max_bytes: 16777216 }),
-);
+// The scorer's caps for this bounty (from its gate.json). Only the text
+// cap shapes the dossier bytes; the rest make this program refuse an
+// entry the scorer would refuse — too many screenshots, one too large,
+// or an app/ too big or with too many files.
+const dossierCaps = {
+  text_max_bytes: 163840,
+  screenshots: { max: 4, max_bytes: 262144 },
+  app_max_files: 993,
+  app_max_bytes: 16777216,
+};
+
+// Copy a folder from the entry into the destination, creating the
+// destination side first. Nothing is skipped and nothing is transformed.
+function mirrorFolder(name: string): void {
+  const source = join(entryRoot, name);
+  const target = join(destination, name);
+  mkdirSync(target, { recursive: true });
+  if (existsSync(source)) {
+    cpSync(source, target, { recursive: true });
+  }
+}
+
+// The site itself is always handed in; the screenshots are too, but only
+// when the folder is there (a run without screenshots still leaves the
+// empty screenshots/ directory in place).
+mkdirSync(destination, { recursive: true });
+mirrorFolder('app');
+mirrorFolder('screenshots');
+
+// The summary of everything just copied, written last so it describes
+// the finished output directory.
+writeFileSync(join(destination, 'dossier.json'), buildDossier(destination, dossierCaps));

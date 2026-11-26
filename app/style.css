@@ -1,0 +1,168 @@
+/* Willow House Budget — warm, calm, readable. System fonts only, no external assets. */
+:root {
+  --green: #1e4d3b;
+  --green-dark: #143527;
+  --green-soft: #e3efe7;
+  --amber: #c98a2b;
+  --amber-soft: #f7ecd4;
+  --cream: #faf7f0;
+  --paper: #ffffff;
+  --ink: #22302a;
+  --muted: #5f6f66;
+  --line: #dfe6df;
+  --red: #b3372e;
+  --red-soft: #fbe9e7;
+  --blue: #2f6f8f;
+  --radius: 14px;
+  --shadow: 0 1px 3px rgba(20, 53, 39, .12), 0 6px 18px rgba(20, 53, 39, .07);
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+a { color: var(--green); }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+/* Header */
+.site-header { background: var(--green); color: #fff; }
+.header-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; padding-top: 14px; padding-bottom: 14px; }
+.brand { display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; }
+.brand-mark {
+  width: 44px; height: 44px; border-radius: 12px; background: var(--amber);
+  color: var(--green-dark); font-size: 26px; font-weight: 800; line-height: 44px; text-align: center;
+}
+.brand-text strong { display: block; font-size: 20px; line-height: 1.2; }
+.brand-text small { display: block; font-size: 12.5px; color: #cfe3d6; }
+.main-nav { display: flex; flex-wrap: wrap; gap: 4px; margin-left: auto; }
+.main-nav a {
+  color: #eaf3ec; text-decoration: none; font-weight: 600; font-size: 15px;
+  padding: 8px 12px; border-radius: 999px;
+}
+.main-nav a:hover { background: rgba(255, 255, 255, .14); }
+.main-nav a.active { background: #fff; color: var(--green-dark); }
+
+/* Page */
+#app { padding: 28px 20px 40px; }
+.page-head { margin: 0 0 20px; }
+.page-head h1 { margin: 0 0 6px; font-size: 30px; line-height: 1.15; color: var(--green-dark); }
+.page-head p { margin: 0; color: var(--muted); max-width: 720px; }
+.page-head .month-tag {
+  display: inline-block; background: var(--amber-soft); color: #7a5410; font-weight: 700;
+  font-size: 13px; padding: 3px 10px; border-radius: 999px; margin-bottom: 8px;
+}
+
+/* Cards and grids */
+.card {
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 18px 20px;
+}
+.card h2 { margin: 0 0 4px; font-size: 18px; color: var(--green-dark); }
+.card h3 { margin: 0 0 8px; font-size: 16px; color: var(--green-dark); }
+.card .sub { color: var(--muted); font-size: 14px; margin: 0 0 12px; }
+.grid { display: grid; gap: 16px; }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.stack { display: grid; gap: 16px; }
+.stack > * + * { margin-top: 0; }
+section.block { margin-top: 24px; }
+section.block > h2 { font-size: 20px; color: var(--green-dark); margin: 0 0 12px; }
+
+/* Stats */
+.stat .label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.stat .value { font-size: 30px; font-weight: 800; color: var(--green-dark); margin: 4px 0 2px; font-variant-numeric: tabular-nums; }
+.stat .note { font-size: 14px; color: var(--muted); }
+.stat.good .value { color: var(--green); }
+.stat.warn .value { color: var(--amber); }
+.stat.bad .value { color: var(--red); }
+
+/* Progress bars */
+.bar { height: 10px; background: #e8ede8; border-radius: 999px; overflow: hidden; margin: 8px 0 6px; }
+.bar > span { display: block; height: 100%; background: var(--green); border-radius: 999px; }
+.bar > span.over { background: var(--red); }
+.bar > span.warm { background: var(--amber); }
+.bar-row { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }
+.bar-row .spent { font-weight: 700; font-variant-numeric: tabular-nums; }
+.bar-row .left { color: var(--muted); font-variant-numeric: tabular-nums; }
+.bar-row .left.over { color: var(--red); font-weight: 700; }
+
+/* Tables and lists */
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td .cat { display: inline-block; font-size: 12.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--green-soft); color: var(--green-dark); }
+tr.income td.num { color: var(--green); font-weight: 700; }
+tr.expense td.num { color: var(--ink); }
+.muted { color: var(--muted); }
+.nowrap { white-space: nowrap; }
+
+/* Bills and goals */
+.bill-row, .goal-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.bill-row:last-child, .goal-row:last-child { border-bottom: 0; }
+.bill-row .name, .goal-row .name { font-weight: 700; min-width: 170px; }
+.bill-row .due, .goal-row .meta { color: var(--muted); font-size: 14px; }
+.bill-row .amount, .goal-row .amount { margin-left: auto; font-weight: 800; font-size: 18px; font-variant-numeric: tabular-nums; }
+.pill { display: inline-block; font-size: 12.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+.pill.paid { background: var(--green-soft); color: var(--green-dark); }
+.pill.due { background: var(--amber-soft); color: #7a5410; }
+.pill.overdue { background: var(--red-soft); color: var(--red); }
+
+/* Forms and buttons */
+form.inline { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+.field { display: grid; gap: 4px; }
+.field label { font-size: 13px; font-weight: 700; color: var(--muted); }
+.field input, .field select {
+  font: inherit; padding: 9px 10px; border: 1px solid #c9d4c9; border-radius: 9px; background: #fff; color: var(--ink);
+}
+.field input:focus, .field select:focus { outline: 3px solid #bcd8c6; border-color: var(--green); }
+button, .btn {
+  font: inherit; font-weight: 700; cursor: pointer; border: 0; border-radius: 9px;
+  padding: 10px 16px; background: var(--green); color: #fff; text-decoration: none; display: inline-block;
+}
+button:hover, .btn:hover { background: var(--green-dark); }
+button.secondary { background: #eef2ee; color: var(--green-dark); border: 1px solid var(--line); }
+button.secondary:hover { background: #e2eae2; }
+button.small { padding: 6px 11px; font-size: 14px; }
+button.danger { background: #fff; color: var(--red); border: 1px solid #e5b8b4; }
+button.danger:hover { background: var(--red-soft); }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin-bottom: 14px; }
+.toolbar .field { min-width: 150px; }
+.toolbar .grow { flex: 1; min-width: 180px; }
+.hint { font-size: 13.5px; color: var(--muted); margin: 10px 0 0; }
+.total-line { display: flex; justify-content: space-between; font-weight: 800; font-size: 17px; padding: 12px 2px 0; }
+.total-line span:last-child { font-variant-numeric: tabular-nums; }
+
+/* Chart */
+canvas.chart { width: 100%; height: 220px; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13.5px; color: var(--muted); margin-top: 8px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+
+/* Footer */
+.site-footer { border-top: 1px solid var(--line); background: #f1efe7; color: var(--muted); font-size: 14px; padding: 22px 0 30px; }
+.site-footer p { margin: 6px 0; max-width: 860px; }
+.empty { color: var(--muted); padding: 18px 4px; }
+
+/* Phone */
+@media (max-width: 860px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .main-nav { margin-left: 0; }
+  .page-head h1 { font-size: 25px; }
+  .stat .value { font-size: 24px; }
+  table.responsive thead { display: none; }
+  table.responsive, table.responsive tbody, table.responsive tr, table.responsive td { display: block; width: 100%; }
+  table.responsive tr { border-bottom: 1px solid var(--line); padding: 6px 0; }
+  table.responsive td { border-bottom: 0; padding: 3px 0; }
+  table.responsive td.num { text-align: left; font-size: 17px; }
+}
+@media (max-width: 480px) {
+  .grid-4 { grid-template-columns: 1fr 1fr; }
+  .bill-row .amount, .goal-row .amount { margin-left: 0; }
+}
